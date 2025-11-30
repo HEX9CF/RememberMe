@@ -48,18 +48,27 @@ bool DatabaseManager::initTable() {
 		"id INTEGER PRIMARY KEY AUTOINCREMENT, "
 		"title TEXT NOT NULL, "
 		"description TEXT, "
-		"completed INTEGER DEFAULT 0)";
+		"completed INTEGER DEFAULT 0, "
+		"category TEXT, "
+		"priority INTEGER DEFAULT 0, "
+		"deadline TEXT)";
 	return query.exec(createTableQuery);
 }
 
 bool DatabaseManager::addTodo(TodoItem& item) {
 	QSqlQuery query;
 	query.prepare(
-		"INSERT INTO todo_items (title, description, completed) VALUES "
-		"(:title, :description, :completed)");
+		"INSERT INTO todo_items (title, description, completed, category, "
+		"priority, deadline) VALUES "
+		"(:title, :description, :completed, :category, :priority, :deadline)");
 	query.bindValue(":title", item.title);
 	query.bindValue(":description", item.description);
 	query.bindValue(":completed", item.completed ? 1 : 0);
+	query.bindValue(":category", item.category);
+	query.bindValue(":priority", item.priority);
+	query.bindValue(":deadline", item.deadline.isValid()
+									 ? item.deadline.toString(Qt::ISODate)
+									 : QVariant(QVariant::String));
 
 	if (query.exec()) {
 		item.id = query.lastInsertId().toInt();
@@ -80,23 +89,36 @@ bool DatabaseManager::updateTodo(const TodoItem& item) {
 	QSqlQuery query;
 	query.prepare(
 		"UPDATE todo_items SET title = :title, description = :description, "
-		"completed = :completed WHERE id = :id");
+		"completed = :completed, category = :category, priority = :priority, "
+		"deadline = :deadline WHERE id = :id");
 	query.bindValue(":title", item.title);
 	query.bindValue(":description", item.description);
 	query.bindValue(":completed", item.completed ? 1 : 0);
+	query.bindValue(":category", item.category);
+	query.bindValue(":priority", item.priority);
+	query.bindValue(":deadline", item.deadline.isValid()
+									 ? item.deadline.toString(Qt::ISODate)
+									 : QVariant(QVariant::String));
 	query.bindValue(":id", item.id);
 	return query.exec();
 }
 
 QList<TodoItem> DatabaseManager::getAllTodos() {
 	QList<TodoItem> list;
-	QSqlQuery query("SELECT id, title, description, completed FROM todo_items");
+	QSqlQuery query(
+		"SELECT id, title, description, completed, category, priority, "
+		"deadline FROM todo_items");
 	while (query.next()) {
 		int id = query.value(0).toInt();
 		QString title = query.value(1).toString();
 		QString description = query.value(2).toString();
 		bool completed = query.value(3).toBool();
-		list.append(TodoItem(id, title, description, completed));
+		QString category = query.value(4).toString();
+		int priority = query.value(5).toInt();
+		QDateTime deadline =
+			QDateTime::fromString(query.value(6).toString(), Qt::ISODate);
+		list.append(TodoItem(id, title, description, completed, category,
+							 priority, deadline));
 	}
 	return list;
 }

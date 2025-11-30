@@ -32,6 +32,42 @@
        </widget>
       </item>
       <item>
+       <widget class="QLineEdit" name="categoryInput">
+        <property name="placeholderText">
+         <string>分类</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="priorityInput">
+        <item>
+         <property name="text">
+          <string>低</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>中</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>高</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateTimeEdit" name="deadlineInput">
+        <property name="displayFormat">
+         <string>yyyy-MM-dd HH:mm</string>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="addButton">
         <property name="text">
          <string>添加</string>
