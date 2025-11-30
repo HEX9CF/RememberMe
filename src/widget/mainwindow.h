@@ -24,6 +24,7 @@ class MainWindow : public QMainWindow {
 	void onCreateClicked();
 	void onDeleteClicked();
 	void onItemChanged(QTableWidgetItem* item);
+	void onItemDoubleClicked(int row, int column);
 
    private:
 	Ui::MainWindow* ui;	 // UI 指针

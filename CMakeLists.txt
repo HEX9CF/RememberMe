@@ -18,6 +18,9 @@ qt_add_executable(todo-list
     src/repo/databasemanager.h
     src/widget/tododialog.cpp
     src/widget/tododialog.h
+    src/widget/tododetaildialog.ui
+    src/widget/tododetaildialog.cpp
+    src/widget/tododetaildialog.h
 )
 
 target_link_libraries(todo-list

@@ -5,6 +5,8 @@
 #include <QTableWidget>
 
 #include "../repo/databasemanager.h"
+#include "tododetaildialog.h"
+#include "tododialog.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
@@ -12,13 +14,15 @@ MainWindow::MainWindow(QWidget* parent)
 	ui->setupUi(this);	// 设置 UI 界面
 
 	// Setup Table
-	ui->todoTableWidget->setColumnCount(6);
+	ui->todoTableWidget->setColumnCount(5);
 	QStringList headers;
-	headers << "完成" << "标题" << "描述" << "分类" << "优先级" << "截止日期";
+	headers << "完成" << "标题" << "分类" << "优先级" << "截止日期";
 	ui->todoTableWidget->setHorizontalHeaderLabels(headers);
 	ui->todoTableWidget->horizontalHeader()->setSectionResizeMode(
 		QHeaderView::Stretch);
 	ui->todoTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+	ui->todoTableWidget->setEditTriggers(
+		QAbstractItemView::NoEditTriggers);	 // Disable editing
 
 	// Initialize Database
 	if (DatabaseManager::instance().openDatabase()) {
@@ -34,6 +38,8 @@ MainWindow::MainWindow(QWidget* parent)
 			&MainWindow::onDeleteClicked);
 	connect(ui->todoTableWidget, &QTableWidget::itemChanged, this,
 			&MainWindow::onItemChanged);
+	connect(ui->todoTableWidget, &QTableWidget::cellDoubleClicked, this,
+			&MainWindow::onItemDoubleClicked);
 
 	// 加载数据
 	loadData();
@@ -102,6 +108,13 @@ void MainWindow::onItemChanged(QTableWidgetItem* item) {
 	}
 }
 
+void MainWindow::onItemDoubleClicked(int row, int column) {
+	if (row >= 0 && row < m_todoItems.size()) {
+		TodoDetailDialog dialog(m_todoItems[row], this);
+		dialog.exec();
+	}
+}
+
 void MainWindow::loadData() {
 	m_todoItems = DatabaseManager::instance().getAllTodos();
 	refreshTableWidget();
@@ -130,23 +143,19 @@ void MainWindow::refreshTableWidget() {
 		// Column 1: Title
 		ui->todoTableWidget->setItem(i, 1, new QTableWidgetItem(item.title));
 
-		// Column 2: Description
-		ui->todoTableWidget->setItem(i, 2,
-									 new QTableWidgetItem(item.description));
+		// Column 2: Category
+		ui->todoTableWidget->setItem(i, 2, new QTableWidgetItem(item.category));
 
-		// Column 3: Category
-		ui->todoTableWidget->setItem(i, 3, new QTableWidgetItem(item.category));
-
-		// Column 4: Priority
+		// Column 3: Priority
 		QString priorityStr =
 			(item.priority == 0) ? "低" : (item.priority == 1 ? "中" : "高");
-		ui->todoTableWidget->setItem(i, 4, new QTableWidgetItem(priorityStr));
+		ui->todoTableWidget->setItem(i, 3, new QTableWidgetItem(priorityStr));
 
-		// Column 5: Deadline
+		// Column 4: Deadline
 		QString deadlineStr = item.deadline.isValid()
 								  ? item.deadline.toString("yyyy-MM-dd HH:mm")
 								  : "";
-		ui->todoTableWidget->setItem(i, 5, new QTableWidgetItem(deadlineStr));
+		ui->todoTableWidget->setItem(i, 4, new QTableWidgetItem(deadlineStr));
 	}
 
 	ui->todoTableWidget->blockSignals(false);
