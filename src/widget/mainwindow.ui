@@ -18,6 +18,13 @@
     <item>
      <layout class="QHBoxLayout" name="inputLayout">
       <item>
+       <widget class="QLineEdit" name="categoryInput">
+        <property name="placeholderText">
+         <string>分类</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLineEdit" name="titleInput">
         <property name="placeholderText">
          <string>标题</string>
@@ -28,13 +35,6 @@
        <widget class="QLineEdit" name="descriptionInput">
         <property name="placeholderText">
          <string>描述</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="categoryInput">
-        <property name="placeholderText">
-         <string>分类</string>
         </property>
        </widget>
       </item>
@@ -91,7 +91,7 @@
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>

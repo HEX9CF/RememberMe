@@ -8,7 +8,7 @@
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent), ui(new Ui::MainWindow) {
 	ui->setupUi(this);	// 设置 UI 界面
-    ui->deadlineInput->setDateTime(QDateTime::currentDateTime());
+	ui->deadlineInput->setDateTime(QDateTime::currentDateTime());
 
 	// Initialize Database
 	if (DatabaseManager::instance().openDatabase()) {
@@ -36,24 +36,25 @@ MainWindow::~MainWindow() {
 void MainWindow::onAddClicked() {
 	QString title = ui->titleInput->text().trimmed();
 	QString description = ui->descriptionInput->text().trimmed();
-    QString category = ui->categoryInput->text().trimmed();
-    int priority = ui->priorityInput->currentIndex();
-    QDateTime deadline = ui->deadlineInput->dateTime();
+	QString category = ui->categoryInput->text().trimmed();
+	int priority = ui->priorityInput->currentIndex();
+	QDateTime deadline = ui->deadlineInput->dateTime();
 
 	if (title.isEmpty()) {
 		QMessageBox::warning(this, "警告", "标题不能为空！");
 		return;
 	}
 
-	TodoItem newItem(-1, title, description, false, category, priority, deadline);
+	TodoItem newItem(-1, title, description, false, category, priority,
+					 deadline);
 
 	if (DatabaseManager::instance().addTodo(newItem)) {
 		m_todoItems.append(newItem);
 		ui->titleInput->clear();
 		ui->descriptionInput->clear();
-        ui->categoryInput->clear();
-        ui->priorityInput->setCurrentIndex(0);
-        ui->deadlineInput->setDateTime(QDateTime::currentDateTime());
+		ui->categoryInput->clear();
+		ui->priorityInput->setCurrentIndex(0);
+		ui->deadlineInput->setDateTime(QDateTime::currentDateTime());
 		refreshListWidget();
 	} else {
 		QMessageBox::warning(this, "Error", "Failed to add todo item!");
@@ -111,23 +112,24 @@ void MainWindow::refreshListWidget() {
 
 	ui->todoListWidget->clear();
 	for (const auto& item : m_todoItems) {
-		QString label = item.title;
+		QString label = "";
+		if (!item.category.isEmpty()) {
+			label += " [" + item.category + "]";
+		}
+		if (!item.title.isEmpty()) {
+			label += " " + item.title;
+		}
 		if (!item.description.isEmpty()) {
 			label += " - " + item.description;
 		}
-        if (!item.category.isEmpty()) {
-            label += " [" + item.category + "]";
-        }
-        QString priorityStr = (item.priority == 0) ? "低" : (item.priority == 1 ? "中" : "高");
-        label += " (优先级: " + priorityStr + ")";
-        if (item.deadline.isValid()) {
-            label += " 截止: " + item.deadline.toString("yyyy-MM-dd HH:mm");
-        }
+		QString priorityStr =
+			(item.priority == 0) ? "低" : (item.priority == 1 ? "中" : "高");
+		label += " (优先级: " + priorityStr + ")";
+		if (item.deadline.isValid()) {
+			label += " " + item.deadline.toString("yyyy-MM-dd HH:mm");
+		}
 
 		QListWidgetItem* widgetItem = new QListWidgetItem(label);
-		if (!item.description.isEmpty()) {
-			label += " - " + item.description;
-		}
 
 		widgetItem->setFlags(widgetItem->flags() | Qt::ItemIsUserCheckable);
 		widgetItem->setCheckState(item.completed ? Qt::Checked : Qt::Unchecked);
