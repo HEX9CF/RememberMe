@@ -1,20 +1,20 @@
-#ifndef TODODIALOG_H
-#define TODODIALOG_H
+#ifndef TODOCREATEDIALOG_H
+#define TODOCREATEDIALOG_H
 
 #include <QDialog>
 
 #include "../model/todoitem.h"
 
 namespace Ui {
-class TodoDialog;
+class TodoCreateDialog;
 }
 
-class TodoDialog : public QDialog {
+class TodoCreateDialog : public QDialog {
 	Q_OBJECT
 
    public:
-	explicit TodoDialog(QWidget* parent = nullptr);
-	~TodoDialog();
+	explicit TodoCreateDialog(QWidget* parent = nullptr);
+	~TodoCreateDialog();
 
 	TodoItem getTodoItem() const;
 
@@ -24,8 +24,8 @@ class TodoDialog : public QDialog {
 	void onClearClicked();
 
    private:
-	Ui::TodoDialog* ui;
+	Ui::TodoCreateDialog* ui;
 	TodoItem m_todoItem;
 };
 
-#endif	// TODODIALOG_H
+#endif	// TODOCREATEDIALOG_H

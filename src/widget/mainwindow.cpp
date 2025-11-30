@@ -5,8 +5,8 @@
 #include <QTableWidget>
 
 #include "../repo/databasemanager.h"
+#include "todocreatedialog.h"
 #include "tododetaildialog.h"
-#include "tododialog.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
@@ -50,7 +50,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::onCreateClicked() {
-	TodoDialog dialog(this);
+	TodoCreateDialog dialog(this);
 	if (dialog.exec() == QDialog::Accepted) {
 		TodoItem newItem = dialog.getTodoItem();
 		if (DatabaseManager::instance().addTodo(newItem)) {

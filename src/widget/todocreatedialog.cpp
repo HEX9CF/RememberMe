@@ -1,27 +1,27 @@
-#include "tododialog.h"
+#include "todocreatedialog.h"
 
 #include <QMessageBox>
 
-#include "ui_tododialog.h"
+#include "ui_todocreatedialog.h"
 
-TodoDialog::TodoDialog(QWidget* parent)
-	: QDialog(parent), ui(new Ui::TodoDialog) {
+TodoCreateDialog::TodoCreateDialog(QWidget* parent)
+	: QDialog(parent), ui(new Ui::TodoCreateDialog) {
 	ui->setupUi(this);
 	ui->deadlineInput->setDateTime(QDateTime::currentDateTime());
 
 	connect(ui->okButton, &QPushButton::clicked, this,
-			&TodoDialog::onOkClicked);
+			&TodoCreateDialog::onOkClicked);
 	connect(ui->cancelButton, &QPushButton::clicked, this,
-			&TodoDialog::onCancelClicked);
+			&TodoCreateDialog::onCancelClicked);
 	connect(ui->clearButton, &QPushButton::clicked, this,
-			&TodoDialog::onClearClicked);
+			&TodoCreateDialog::onClearClicked);
 }
 
-TodoDialog::~TodoDialog() { delete ui; }
+TodoCreateDialog::~TodoCreateDialog() { delete ui; }
 
-TodoItem TodoDialog::getTodoItem() const { return m_todoItem; }
+TodoItem TodoCreateDialog::getTodoItem() const { return m_todoItem; }
 
-void TodoDialog::onOkClicked() {
+void TodoCreateDialog::onOkClicked() {
 	QString title = ui->titleInput->text().trimmed();
 	QString description = ui->descriptionInput->text().trimmed();
 	QString category = ui->categoryInput->text().trimmed();
@@ -38,9 +38,9 @@ void TodoDialog::onOkClicked() {
 	accept();
 }
 
-void TodoDialog::onCancelClicked() { reject(); }
+void TodoCreateDialog::onCancelClicked() { reject(); }
 
-void TodoDialog::onClearClicked() {
+void TodoCreateDialog::onClearClicked() {
 	ui->titleInput->clear();
 	ui->descriptionInput->clear();
 	ui->categoryInput->clear();
