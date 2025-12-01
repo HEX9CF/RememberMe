@@ -70,6 +70,26 @@
           </item>
           <item>
            <property name="text">
+            <string>今年过期</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>本月过期</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>本周过期</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>今天过期</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>已过期</string>
            </property>
           </item>

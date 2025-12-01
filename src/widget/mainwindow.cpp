@@ -359,13 +359,42 @@ void MainWindow::refreshTableWidget() {
 		if (m_completedFilterIndex == 2 && !item.completed) continue;
 
 		// 过期状态筛选
-		// 1: 未过期, 2: 已过期
+		// 0: 全部
+		// 1: 未过期
+		// 2: 今年过期
+		// 3: 本月过期
+		// 4: 本周过期
+		// 5: 今天过期
+		// 6: 已过期
 		if (m_expiredFilterIndex == 1) {
 			// 显示未过期：跳过已过期的（有截止日期且小于当前时间）
 			if (item.deadline.isValid() && item.deadline < currentDateTime)
 				continue;
-		}
-		if (m_expiredFilterIndex == 2) {
+		} else if (m_expiredFilterIndex == 2) {
+			// 今年过期
+			if (!item.deadline.isValid() ||
+				item.deadline.date().year() != currentDateTime.date().year())
+				continue;
+		} else if (m_expiredFilterIndex == 3) {
+			// 本月过期
+			if (!item.deadline.isValid() ||
+				item.deadline.date().year() != currentDateTime.date().year() ||
+				item.deadline.date().month() != currentDateTime.date().month())
+				continue;
+		} else if (m_expiredFilterIndex == 4) {
+			// 本周过期
+			if (!item.deadline.isValid()) continue;
+			int itemYear = 0;
+			int itemWeek = item.deadline.date().weekNumber(&itemYear);
+			int currentYear = 0;
+			int currentWeek = currentDateTime.date().weekNumber(&currentYear);
+			if (itemYear != currentYear || itemWeek != currentWeek) continue;
+		} else if (m_expiredFilterIndex == 5) {
+			// 今天过期
+			if (!item.deadline.isValid() ||
+				item.deadline.date() != currentDateTime.date())
+				continue;
+		} else if (m_expiredFilterIndex == 6) {
 			// 显示已过期：跳过未过期的（无截止日期或大于等于当前时间）
 			if (!item.deadline.isValid() || item.deadline >= currentDateTime)
 				continue;
