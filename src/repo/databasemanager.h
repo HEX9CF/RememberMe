@@ -17,6 +17,7 @@ class DatabaseManager {
 	bool removeTodo(int id);
 	bool updateTodo(const TodoItem& item);
 	QList<TodoItem> getAllTodos();
+	QList<TodoItem> searchTodos(const QString& query);
 
    private:
 	DatabaseManager();

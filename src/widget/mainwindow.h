@@ -23,6 +23,7 @@ class MainWindow : public QMainWindow {
    private slots:
 	void onCreateClicked();
 	void onDeleteClicked();
+	void onSearchClicked();
 	void onItemChanged(QTableWidgetItem* item);
 	void onItemDoubleClicked(int row, int column);
 

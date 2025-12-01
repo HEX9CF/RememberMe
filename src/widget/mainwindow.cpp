@@ -36,6 +36,10 @@ MainWindow::MainWindow(QWidget* parent)
 			&MainWindow::onCreateClicked);
 	connect(ui->deleteButton, &QPushButton::clicked, this,
 			&MainWindow::onDeleteClicked);
+	connect(ui->searchButton, &QPushButton::clicked, this,
+			&MainWindow::onSearchClicked);
+	connect(ui->searchLineEdit, &QLineEdit::returnPressed, this,
+			&MainWindow::onSearchClicked);
 	connect(ui->todoTableWidget, &QTableWidget::itemChanged, this,
 			&MainWindow::onItemChanged);
 	connect(ui->todoTableWidget, &QTableWidget::cellDoubleClicked, this,
@@ -89,6 +93,16 @@ void MainWindow::onDeleteClicked() {
 	}
 
 	refreshTableWidget();
+}
+
+void MainWindow::onSearchClicked() {
+	QString searchText = ui->searchLineEdit->text();
+	if (searchText.isEmpty()) {
+		loadData();
+	} else {
+		m_todoItems = DatabaseManager::instance().searchTodos(searchText);
+		refreshTableWidget();
+	}
 }
 
 void MainWindow::onItemChanged(QTableWidgetItem* item) {

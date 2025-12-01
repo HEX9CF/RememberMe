@@ -122,3 +122,28 @@ QList<TodoItem> DatabaseManager::getAllTodos() {
 	}
 	return list;
 }
+
+QList<TodoItem> DatabaseManager::searchTodos(const QString& searchText) {
+	QList<TodoItem> list;
+	QSqlQuery query;
+	query.prepare(
+		"SELECT id, title, description, completed, category, priority, "
+		"deadline FROM todo_items WHERE title LIKE :search OR description LIKE "
+		":search");
+	query.bindValue(":search", "%" + searchText + "%");
+	query.exec();
+
+	while (query.next()) {
+		int id = query.value(0).toInt();
+		QString title = query.value(1).toString();
+		QString description = query.value(2).toString();
+		bool completed = query.value(3).toBool();
+		QString category = query.value(4).toString();
+		int priority = query.value(5).toInt();
+		QDateTime deadline =
+			QDateTime::fromString(query.value(6).toString(), Qt::ISODate);
+		list.append(TodoItem(id, title, description, completed, category,
+							 priority, deadline));
+	}
+	return list;
+}
