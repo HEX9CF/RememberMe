@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>创建待办事项</string>
+   <string>创建任务</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

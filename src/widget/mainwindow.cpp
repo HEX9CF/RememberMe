@@ -91,7 +91,7 @@ void MainWindow::onCreateClicked() {
 			refreshCategoryList();
 			refreshTableWidget();
 		} else {
-			QMessageBox::warning(this, "错误", "添加待办事项失败！");
+			QMessageBox::warning(this, "错误", "添加任务失败！");
 		}
 	}
 }
@@ -132,7 +132,7 @@ void MainWindow::onCopyClicked() {
 			if (DatabaseManager::instance().addTask(newItem)) {
 				m_todoItems.append(newItem);
 			} else {
-				QMessageBox::warning(this, "错误", "复制待办事项失败！");
+				QMessageBox::warning(this, "错误", "复制任务失败！");
 			}
 		}
 	}
@@ -173,7 +173,7 @@ void MainWindow::onDeleteClicked() {
 				}
 			}
 		} else {
-			QMessageBox::warning(this, "错误", "删除待办事项失败！");
+			QMessageBox::warning(this, "错误", "删除任务失败！");
 		}
 	}
 
@@ -271,7 +271,7 @@ void MainWindow::onItemChanged(QTableWidgetItem* item) {
 			if (todo.completed != completed) {
 				todo.completed = completed;
 				if (!DatabaseManager::instance().updateTask(todo)) {
-					QMessageBox::warning(this, "错误", "更新待办事项失败！");
+					QMessageBox::warning(this, "错误", "更新任务失败！");
 				}
 			}
 			break;
@@ -299,7 +299,7 @@ void MainWindow::onItemDoubleClicked(int row, int column) {
 			if (DatabaseManager::instance().updateTask(updatedItem)) {
 				loadData();	 // 刷新所有数据
 			} else {
-				QMessageBox::warning(this, "错误", "更新待办事项失败！");
+				QMessageBox::warning(this, "错误", "更新任务失败！");
 			}
 		}
 	}
