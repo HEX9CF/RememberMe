@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
+    <width>1200</width>
     <height>900</height>
    </rect>
   </property>
@@ -36,7 +36,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="listWidget"/>
+       <widget class="QListWidget" name="categoryListWidget"/>
       </item>
       <item>
        <spacer name="verticalSpacer">
@@ -98,7 +98,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1600</width>
+     <width>1200</width>
      <height>24</height>
     </rect>
    </property>

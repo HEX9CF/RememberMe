@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QListWidgetItem>
 #include <QMainWindow>
 #include <QTableWidgetItem>
 
@@ -24,14 +25,17 @@ class MainWindow : public QMainWindow {
 	void onCreateClicked();
 	void onDeleteClicked();
 	void onSearchClicked();
+	void onCategorySelected(QListWidgetItem* item);
 	void onItemChanged(QTableWidgetItem* item);
 	void onItemDoubleClicked(int row, int column);
 
    private:
 	Ui::MainWindow* ui;	 // UI 指针
 	QList<TodoItem> m_todoItems;
+	QString m_currentCategoryFilter;
 
 	void loadData();
 	void refreshTableWidget();
+	void refreshCategoryList();
 };
 #endif	// MAINWINDOW_H
