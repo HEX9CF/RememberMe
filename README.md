@@ -51,7 +51,7 @@
     ```
 
 3.  运行
-    在 `build` 目录下找到可执行文件 `todo-list` (Windows 上为 `todo-list.exe`) 并运行。
+    在 `build` 目录下找到可执行文件 `remember-me` (Windows 上为 `remember-me.exe`) 并运行。（确保 Qt DLL 在路径中或使用 `windeployqt` 工具）
 
 ## 参与贡献
 

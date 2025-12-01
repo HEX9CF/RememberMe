@@ -109,7 +109,7 @@ src/
     cmake --build .
     ```
 3.  **运行**:
-    *   Windows: 运行 `build/Debug/todo-list.exe` (确保 Qt DLL 在路径中或使用 `windeployqt`)。
+    *   Windows: 运行 `build/Debug/remember-me.exe` (确保 Qt DLL 在路径中或使用 `windeployqt`)。
 
 ### 已知问题与不足
 *   **UI 美化**: 目前使用原生 Qt 控件样式，未应用自定义 QSS，界面较为朴素。
