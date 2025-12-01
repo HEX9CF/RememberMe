@@ -23,8 +23,14 @@ MainWindow::MainWindow(QWidget* parent)
 	QStringList headers;
 	headers << "完成" << "标题" << "优先级" << "截止日期";
 	ui->todoTableWidget->setHorizontalHeaderLabels(headers);
-	ui->todoTableWidget->horizontalHeader()->setSectionResizeMode(
-		QHeaderView::Stretch);
+	
+	// Set column resize modes
+	QHeaderView* header = ui->todoTableWidget->horizontalHeader();
+	header->setSectionResizeMode(0, QHeaderView::ResizeToContents); // Completed
+	header->setSectionResizeMode(1, QHeaderView::Stretch);          // Title
+	header->setSectionResizeMode(2, QHeaderView::ResizeToContents); // Priority
+	header->setSectionResizeMode(3, QHeaderView::ResizeToContents); // Deadline
+
 	ui->todoTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 	ui->todoTableWidget->setEditTriggers(
 		QAbstractItemView::NoEditTriggers);	 // Disable editing
