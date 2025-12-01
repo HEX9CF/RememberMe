@@ -23,6 +23,7 @@ class MainWindow : public QMainWindow {
 
    private slots:
 	void onCreateClicked();
+	void onCopyClicked();
 	void onDeleteClicked();
 	void onSearchClicked();
 	void onCategorySelected(QListWidgetItem* item);

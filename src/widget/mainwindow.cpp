@@ -23,13 +23,14 @@ MainWindow::MainWindow(QWidget* parent)
 	QStringList headers;
 	headers << "完成" << "标题" << "优先级" << "截止日期";
 	ui->todoTableWidget->setHorizontalHeaderLabels(headers);
-	
+
 	// Set column resize modes
 	QHeaderView* header = ui->todoTableWidget->horizontalHeader();
-	header->setSectionResizeMode(0, QHeaderView::ResizeToContents); // Completed
-	header->setSectionResizeMode(1, QHeaderView::Stretch);          // Title
-	header->setSectionResizeMode(2, QHeaderView::ResizeToContents); // Priority
-	header->setSectionResizeMode(3, QHeaderView::ResizeToContents); // Deadline
+	header->setSectionResizeMode(0,
+								 QHeaderView::ResizeToContents);  // Completed
+	header->setSectionResizeMode(1, QHeaderView::Stretch);		  // Title
+	header->setSectionResizeMode(2, QHeaderView::ResizeToContents);	 // Priority
+	header->setSectionResizeMode(3, QHeaderView::ResizeToContents);	 // Deadline
 
 	ui->todoTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 	ui->todoTableWidget->setEditTriggers(
@@ -45,6 +46,8 @@ MainWindow::MainWindow(QWidget* parent)
 	// 连接信号和槽
 	connect(ui->createButton, &QPushButton::clicked, this,
 			&MainWindow::onCreateClicked);
+	connect(ui->copyButton, &QPushButton::clicked, this,
+			&MainWindow::onCopyClicked);
 	connect(ui->deleteButton, &QPushButton::clicked, this,
 			&MainWindow::onDeleteClicked);
 	connect(ui->searchButton, &QPushButton::clicked, this,
@@ -78,6 +81,51 @@ void MainWindow::onCreateClicked() {
 			QMessageBox::warning(this, "Error", "Failed to add todo item!");
 		}
 	}
+}
+
+void MainWindow::onCopyClicked() {
+	QList<QTableWidgetItem*> selectedItems =
+		ui->todoTableWidget->selectedItems();
+	QSet<int> rows;
+	for (auto item : selectedItems) {
+		rows.insert(item->row());
+	}
+
+	if (rows.isEmpty()) return;
+
+	QList<int> sortedRows = rows.values();
+	std::sort(sortedRows.begin(), sortedRows.end());
+
+	for (int row : sortedRows) {
+		QTableWidgetItem* idItem = ui->todoTableWidget->item(row, 0);
+		if (!idItem) continue;
+		int id = idItem->data(Qt::UserRole).toInt();
+
+		// Find original item
+		TodoItem originalItem;
+		bool found = false;
+		for (const auto& item : m_todoItems) {
+			if (item.id == id) {
+				originalItem = item;
+				found = true;
+				break;
+			}
+		}
+
+		if (found) {
+			TodoItem newItem = originalItem;
+			newItem.id = -1;			 // Reset ID so DB assigns a new one
+
+			if (DatabaseManager::instance().addTodo(newItem)) {
+				m_todoItems.append(newItem);
+			} else {
+				QMessageBox::warning(this, "Error",
+									 "Failed to copy todo item!");
+			}
+		}
+	}
+	refreshCategoryList();
+	refreshTableWidget();
 }
 
 void MainWindow::onDeleteClicked() {
